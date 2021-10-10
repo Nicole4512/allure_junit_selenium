@@ -13,6 +13,7 @@ import java.util.List;
 
 import static java.lang.Thread.sleep;
 
+
 public class CalculatorPage extends BasePage {
     @FindBy(xpath = "//span[@class = 'calculator__currency-field-btn']")
     private List<WebElement> currencyList;
@@ -91,25 +92,26 @@ public class CalculatorPage extends BasePage {
 
     }
 
+    /**
+     * Метод изменения состояния checkbox
+     *
+     * @param checkboxName - название checkbox
+     * @param value        - значение checkbox
+     * @return CalculatorPage - т.е. остаемся на странице
+     */
+    @Step("Изменить состояние {checkboxName} на {value}")
     public CalculatorPage selectCheckbox(String checkboxName, String value) {
         for (WebElement checkbox : checkboxList) {
             WebElement checkboxText = checkbox.findElement(By.xpath(".//span[@class = 'calculator__check-text']"));
             if (checkboxName.equalsIgnoreCase(checkboxText.getText())) {
                 WebElement checkboxBtn = checkbox.findElement(By.xpath(".//div[@unselectable = 'on']"));
-                if(checkboxBtn.getAttribute("className").contains("checked")){
-                    if(value.equalsIgnoreCase("False")){
+                if (checkboxBtn.getAttribute("className").contains("checked")) {
+                    if (value.equalsIgnoreCase("False")) {
                         checkboxBtn.click();
                         return this;
                     }
-                } else if (value.equalsIgnoreCase("True")){
+                } else if (value.equalsIgnoreCase("True")) {
                     checkboxBtn.click();
-
-                    try {
-                        sleep(5000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    return this;
                 }
             }
         }
@@ -117,6 +119,14 @@ public class CalculatorPage extends BasePage {
         return this;
     }
 
+    /**
+     * Метод проверки расчета
+     *
+     * @param name  - название поля для проверки
+     * @param value - ожидаемое значение
+     * @return CalculatorPage - т.е. остаемся на странице
+     */
+    @Step("Проверить, что расчет по полю {name} равен {value}")
     public CalculatorPage checkResults(String name, String value) {
         switch (name) {
             case "Начислено %":
